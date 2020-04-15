@@ -29,6 +29,7 @@
       </div>
       <div id="main-pane">
         <div id="list-pane">
+          <div id="status"></div>
           <div class="page-header">
             <h2 id="active-title">
               <span class="active-job"></span>
@@ -90,7 +91,9 @@
         </div>
       </div>
     </div>
-
+    <script type="text/template" id="status-template">
+	    <div><span>Messaging service is <strong><%- status %></strong>. <a data-action="<%- action %>" href="#">Click to <%- action %>.</a></span></div>
+    </script>
     <script type="text/template" id="overview-item-template">
       <ul class="nav nav-sidebar">
         <li data-state="">
@@ -140,6 +143,7 @@
         <div class="panel-heading">
           <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h3 class="panel-title"><%- job.name %></h3>
+		  <p><span class="label label-info"><%- `db.getCollection('agendaJobs').find({_id: ObjectId("${job._id}")})`  %></span></p>
           <% if (repeating) { %><span class="label label-info"><i class="glyphicon glyphicon-repeat"></i> <%- job.repeatInterval %></span><% } %>
           <% if (scheduled) { %><span class="label label-info">Scheduled</span><% } %>
           <% if (queued) { %><span class="label label-primary">Queued</span><% } %>
@@ -156,6 +160,7 @@
 
           <strong>Job data</strong>
           <pre><%- JSON.stringify(job.data, null, 2) %></pre>
+          <pre><%- JSON.stringify(job.result, null, 2) %></pre>
           <% if (failed) { %>
             <strong>Failure reason</strong>
             <pre><%- JSON.stringify(job.failReason || '', null, 2) %></pre>
